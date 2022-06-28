@@ -20,8 +20,8 @@ const InternSchema = new mongoose.Schema(
     },
     collegeId: {
       type: ObjectId,
-      ref: "College",
-      required: true,
+      ref: "College"
+      
     },
     isDeleted: {
       type: Boolean,
