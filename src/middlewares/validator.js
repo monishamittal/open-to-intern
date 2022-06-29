@@ -1,15 +1,19 @@
 const mongoose = require('mongoose')
+
 //Name Validation
 const isValidName = function (name) {
     const nameRegex = /^[a-zA-Z ]+$/
     return nameRegex.test(name)
 }
 
+
 //fullName Validation
 const isValidFullName = function (fullName) {
-    const fullNameRegex = /([A-Z][^\s,.]+[.]?\s[(]?)*(College|University|Institute|Law School|School of|Academy)[^,\d]*(?=,|\d)/
+    const fullNameRegex = /\w+([, ]+\w+){1,2}/
+
     return fullNameRegex.test(fullName)
 }
+
 
 //Email Validation 
 const isValidEmail = function (email) {
@@ -17,25 +21,22 @@ const isValidEmail = function (email) {
     return emailRegex.test(email)
 }
 
+
 //Mobile Validation
 const isValidMobile = function (mobile) {
     const mobileRegex = /^[0-9]{10}$/
     return mobileRegex.test(mobile)
 }
 
-//ObjectId Validation
-const isValidObjectId = function (id) {
-    var ObjectId = mongoose.Types.ObjectId;
-    return ObjectId.isValid(id)
-}
 
 
-//Boolean Validation
-const isBoolean = function (value) {
-    if (value === true || value === false) return true
-    return false
+// //Boolean Validation
+// const isBoolean = function (value) {
+//     if (value === true || value === false) return true
+//     return false
 
-}
+// }
+
 
 //Logolink Validation
 const isValidLogoLink = function (logolink) {
@@ -59,8 +60,6 @@ module.exports = {
     isValidFullName,
     isValidEmail,
     isValidMobile,
-    isBoolean,
-    isValidObjectId,
+    // isBoolean,
     isValidLogoLink
-
 }
