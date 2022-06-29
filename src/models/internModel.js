@@ -14,9 +14,9 @@ const InternSchema = new mongoose.Schema(
     },
 
     mobile: {
-      type: String,
+      type: Number,
       unique: true,
-      required: true,
+      required: true
     },
     collegeId: {
       type: ObjectId,
@@ -25,7 +25,7 @@ const InternSchema = new mongoose.Schema(
     },
     isDeleted: {
       type: Boolean,
-      default: false,
+      default: false
     },
   },
   { timestamps: true }

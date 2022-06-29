@@ -2,8 +2,8 @@ const collegeModel = require("../models/collegeModel")
 
 
 const createColleges = async function(req,res){
-    let response = req.body
-    const dataCreated = await collegeModel.create(response)
+    let data = req.body
+    const dataCreated = await collegeModel.create(data)
     res.status(201).send({status:true, data:dataCreated})
 }
 
