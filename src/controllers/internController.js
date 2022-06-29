@@ -11,6 +11,7 @@ const createInterns = async function (req, res) {
 
         if (Object.keys(req.body).length < 1) return res.status(400).send({ status: false, msg: "Insert Data : BAD REQUEST" })
 
+        
         if (!isValid(name)) {
             return res.status(400).send({ status: false, msg: "Enter Intern Name" })
         }
@@ -41,9 +42,6 @@ const createInterns = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Enter college Name" })
         }
         let cName = await collegeModel.findOne({ name: collegeName })
-        if (cName) {
-            return res.status(400).send({ status: false, msg: "College name already exists" })
-        }
         if (!cName) {
             return res.status(404).send({ status: false, msg: "No College Found" })
         }
