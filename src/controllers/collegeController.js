@@ -31,7 +31,10 @@ const createColleges = async function (req, res) {
     if (!isValidLogoLink(logoLink)) {
       return res.status(400).send({ status:false, msg: "Enter Logo Link" })
     }
-    let savedData = await collegeModel.create(req.body);
+    let datas = req.body
+    let fullNameSpaced = datas.fullName.replace(/\s+/g, " ")
+    datas['fullName'] = fullNameSpaced
+    let savedData = await collegeModel.create(datas);
 
     return res.status(201).send({ status: true, msg: "college details are successfully created", data: savedData })
   } catch (err) {
@@ -48,22 +51,22 @@ const collegeDetails = async function (req, res) {
       return res.status(400).send({ status:false, msg: "Provide The College Name" })
     }
 
-    let college = await collegeModel.findOne(collegeName)
-    if (!college) {
+    let collegefound = await collegeModel.findOne(collegeName)
+    if (!collegefound) {
       return res.status(404).send({status:false, msg: "No College Found" })
     }
 
-    const { _id, name, fullName, logoLink } = college
+    const { _id, name, fullName, logoLink } = collegefound
     const id = _id.toString()
-    let interns = await internModel.find({ collegeId: id })
-
+    let interns = await internModel.find({ collegeId: id }).select({_id:1,name:1,email:1,mobile:1,collegeId:1})
     if (interns.length == 0) {
       let noIntern = "This College Doesn't Have Any Intern"
       interns = noIntern
     }
-    const values = { _id, name, fullName, logoLink, interns }
+ 
+    const College = { name, fullName, logoLink, interns }
 
-    return res.status(200).send({ status: true, msg: "List Of The Interns Of This College", data: { values } })
+    return res.status(200).send({ status: true, msg: "List Of The Interns Of This College", data: { College } })
   }
   catch (err) {
     return res.status(500).send({ status:false, msg: err.message })

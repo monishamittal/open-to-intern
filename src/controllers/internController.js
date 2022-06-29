@@ -47,7 +47,8 @@ const createInterns = async function (req, res) {
         }
 
         let data = req.body
-
+        let nameSpaced = data.name.replace(/\s+/g, " ")
+        data['name'] = nameSpaced
         const college = await collegeModel.find({ name: data.collegeName })
 
         const [dataOfCollege] = college
