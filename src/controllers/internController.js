@@ -2,14 +2,19 @@ const internModel = require("../models/internModel")
 const collegeModel = require("../models/collegeModel")
 const validation = require("../validator/validator");
 
-let { isEmpty, isValidName, isValidEmail, isValidMobile } = validation;
+let { isEmpty, isValidName, isValidEmail, isValidMobile } = validation;             //Destruction Validator Functions Here
+
+//================================================Intern's Details Creation ============================================
 
 const createInterns = async function (req, res) {
     try {
-        let { name, email, mobile, collegeName } = req.body;
-        let collegeLowerCase = collegeName.toLowerCase()
+        let data = req.body
+        let { name, email, mobile, collegeName} = data;
 
-        if (Object.keys(req.body).length < 1) return res.status(400).send({ status: false, msg: "Insert Data : BAD REQUEST" })
+    //  Validating Requested Data 
+
+        if (Object.keys(data).length < 1) return res.status(400).send({ status: false, msg: "Insert Data : BAD REQUEST" })
+
 
         if (!isEmpty(name)) {
             return res.status(400).send({ status: false, msg: "Enter Intern Name" })
@@ -41,24 +46,24 @@ const createInterns = async function (req, res) {
             return res.status(400).send({ status: false, msg: "mobile no already exists" })
         }
 
+
+        let collegeLowerCase = collegeName.replace(/\s+/g, "").toLowerCase()
         if (!isEmpty(collegeName)) {
             return res.status(400).send({ status: false, msg: "Enter college Name" })
         }
         let college = await collegeModel.find({ name: collegeLowerCase })
-        if (!college) {
+        if (college.length==0) {
             return res.status(404).send({ status: false, msg: "No College Found" })
         }
 
-        let data = req.body
-        let nameSpaced = data.name.replace(/\s+/g, " ")
-        data['name'] = nameSpaced
+//     Creating Interns Details Here
+
+        let nameSpaced = data.name.replace(/\s+/g, " ")                     //Removing Spaces From Name Of Intern
+        data['name'] = nameSpaced  
         const [dataOfCollege] = college
-        const collegeId = dataOfCollege._id.toString()
-        if (college) {
-            data['collegeId'] = collegeId
-        } else {
-            res.status(400).send({ status: false, msg: "No id Found With This College Name" })
-        }
+        const collegeId = dataOfCollege._id                                 //Fetching the College's Id 
+        data['collegeId'] = collegeId
+        
 
         const createIntern = await internModel.create(data)
         res.status(201).send({ status: true, msg: "Intern is Succesfully registered", data: createIntern })

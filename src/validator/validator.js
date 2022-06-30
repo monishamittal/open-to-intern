@@ -2,30 +2,49 @@ const mongoose = require('mongoose')
 
 //Name Validation
 const isValidName = function (name) {
-    const nameRegex = /^[a-zA-Z ]+$/
-    return nameRegex.test(name)
+   try{
+        const nameRegex = /^[a-zA-Z ]+$/
+        return nameRegex.test(name)
+   }
+    catch(err){
+       return res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
 //fullName Validation
 const isValidFullName = function (fullName) {
-    const fullNameRegex = /\w+([, ]+\w+){1,2}/
-
-    return fullNameRegex.test(fullName)
+    try{
+        const fullNameRegex = /\w+([, ]+\w+){1,2}/
+        return fullNameRegex.test(fullName)
+    }
+    catch(err){
+       return res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
 //Email Validation 
 const isValidEmail = function (email) {
-    const emailRegex = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/
-    return emailRegex.test(email)
+    try{
+        const emailRegex = /^[a-z0-9][a-z0-9-_\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/
+        return emailRegex.test(email)
+    }
+    catch(err){
+       return  res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
 //Mobile Validation
 const isValidMobile = function (mobile) {
-    const mobileRegex = /^[0-9]{10}$/
-    return mobileRegex.test(mobile)
+    try{
+        const mobileRegex = /^[0-9]{10}$/
+        return mobileRegex.test(mobile)
+    }
+    catch(err){
+        return res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
@@ -40,16 +59,26 @@ const isValidMobile = function (mobile) {
 
 //Logolink Validation
 const isValidLogoLink = function (logolink) {
-    const logolinkRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return logolinkRegex.test(logolink)
+    try{
+        const logolinkRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+        return logolinkRegex.test(logolink)
+    }
+    catch(err){
+        return res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
 //Value Validation
 const isEmpty = function(value){
-    if(typeof value ==='undefined' || value ===null)  return false
-    if(typeof value ==='string' && value.trim().length ===0)return false
-    return true
+    try{
+        if(typeof value ==='undefined' || value ===null)  return false
+        if(typeof value ==='string' && value.trim().length ===0)return false
+        return true
+    }
+    catch(err){
+        return res.status(500).send({status:false,msg:err.message})
+    } 
 }
 
 
