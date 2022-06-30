@@ -7,6 +7,7 @@ let { isEmpty, isValidName, isValidEmail, isValidMobile } = validation;
 const createInterns = async function (req, res) {
     try {
         let { name, email, mobile, collegeName } = req.body;
+        let collegeLowerCase = collegeName.toLowerCase()
 
         if (Object.keys(req.body).length < 1) return res.status(400).send({ status: false, msg: "Insert Data : BAD REQUEST" })
 
@@ -43,16 +44,14 @@ const createInterns = async function (req, res) {
         if (!isEmpty(collegeName)) {
             return res.status(400).send({ status: false, msg: "Enter college Name" })
         }
-        let cName = await collegeModel.findOne({ name: collegeName })
-        if (!cName) {
+        let college = await collegeModel.find({ name: collegeLowerCase })
+        if (!college) {
             return res.status(404).send({ status: false, msg: "No College Found" })
         }
 
         let data = req.body
         let nameSpaced = data.name.replace(/\s+/g, " ")
         data['name'] = nameSpaced
-
-        const college = await collegeModel.find({ name: data.collegeName })
         const [dataOfCollege] = college
         const collegeId = dataOfCollege._id.toString()
         if (college) {
