@@ -1,34 +1,35 @@
 const internModel = require("../models/internModel")
 const collegeModel = require("../models/collegeModel")
-const validation = require("../middlewares/validator");
+const validation = require("../validator/validator");
 
-let { isValid, isValidName, isValidEmail, isValidMobile } = validation;
+let { isEmpty, isValidName, isValidEmail, isValidMobile } = validation;
 
 const createInterns = async function (req, res) {
     try {
-
         let { name, email, mobile, collegeName } = req.body;
 
         if (Object.keys(req.body).length < 1) return res.status(400).send({ status: false, msg: "Insert Data : BAD REQUEST" })
 
-        
-        if (!isValid(name)) {
+        if (!isEmpty(name)) {
             return res.status(400).send({ status: false, msg: "Enter Intern Name" })
         }
         if (!isValidName(name)) {
             return res.status(400).send({ status: false, msg: "Intern name should be valid" })
         }
-        if (!isValid(email)) {
+
+        if (!isEmpty(email)) {
             return res.status(400).send({ status: false, msg: " please enter email" })
         }
         if (!isValidEmail(email)) {
             return res.status(400).send({ status: false, msg: " please enter valid email" })
         }
+
         let emailId = await internModel.findOne({ email: email })
         if (emailId) {
             return res.status(400).send({ status: false, msg: "emailId already exists" })
         }
-        if (!isValid(mobile)) {
+
+        if (!isEmpty(mobile)) {
             return res.status(400).send({ status: false, msg: " please enter mobile number" })
         }
         if (!isValidMobile(mobile)) {
@@ -38,7 +39,8 @@ const createInterns = async function (req, res) {
         if (mobileNo) {
             return res.status(400).send({ status: false, msg: "mobile no already exists" })
         }
-        if (!isValid(collegeName)) {
+
+        if (!isEmpty(collegeName)) {
             return res.status(400).send({ status: false, msg: "Enter college Name" })
         }
         let cName = await collegeModel.findOne({ name: collegeName })
@@ -49,12 +51,10 @@ const createInterns = async function (req, res) {
         let data = req.body
         let nameSpaced = data.name.replace(/\s+/g, " ")
         data['name'] = nameSpaced
+
         const college = await collegeModel.find({ name: data.collegeName })
-
         const [dataOfCollege] = college
-
         const collegeId = dataOfCollege._id.toString()
-
         if (college) {
             data['collegeId'] = collegeId
         } else {
